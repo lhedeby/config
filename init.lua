@@ -538,11 +538,11 @@ dapui.setup()
 
 vim.keymap.set('n', '<leader>do', function()
   dapui.open()
-end, { desc = "[O]pen" })
+end, { desc = "[O]pen UI" })
 
 vim.keymap.set('n', '<leader>dp', function()
   dapui.close()
-end, { desc = "[P]close" })
+end, { desc = "[P]close UI" })
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
@@ -556,10 +556,15 @@ end
 
 
 
-vim.keymap.set('n', '<leader>dc', "<cmd>:lua require('dap').continue()<CR>")
-vim.keymap.set('n', '<leader>db', "<cmd>:lua require('dap').toggle_breakpoint()<CR>")
+-- vim.keymap.set('n', '<leader>dc', "<cmd>:lua require('dap').continue()<CR>")
+-- vim.keymap.set('n', '<leader>db', "<cmd>:lua require('dap').toggle_breakpoint()<CR>")
 
-vim.keymap.set('n', '<F10>', function() dap.step_over() end)
+vim.keymap.set('n', '<leader>dc', function() dap.continue() end, { desc = "[C]ontinue/Start Debugging"})
+vim.keymap.set('n', '<leader>dq', function() dap.step_over() end, { desc = "[Q] Step over"})
+vim.keymap.set('n', '<leader>dw', function() dap.step_into() end, { desc = "[W] Step into"})
+vim.keymap.set('n', '<leader>de', function() dap.step_out() end, { desc = "[E] Step out"})
+vim.keymap.set('n', '<leader>db', function() dap.toggle_breakpoint() end, { desc = "Set [B]reakpoint"})
+
 
 
 -- nvim-cmp setup
