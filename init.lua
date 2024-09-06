@@ -1,9 +1,8 @@
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+
+-- vim.loader.enable()
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -22,15 +21,18 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
-  'tpope/vim-surround',
-  'tpope/vim-sleuth',
-  'mfussenegger/nvim-dap',
-  'rcarriga/nvim-dap-ui',
-  'Issafalcon/lsp-overloads.nvim',
+  { 'lhedeby/around.nvim', event = "VeryLazy" },
+  { 'tpope/vim-fugitive',  event = "VeryLazy" },
+  { 'tpope/vim-rhubarb',   event = "VeryLazy" },
+  -- 'tpope/vim-surround',
+  -- 'tpope/vim-sleuth',
+  -- 'mfussenegger/nvim-dap',
+  -- 'rcarriga/nvim-dap-ui',
+  -- 'Issafalcon/lsp-overloads.nvim',
+  { 'github/copilot.vim',  event = "VeryLazy" },
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+    event = "VeryLazy",
     dependencies = {
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
@@ -49,58 +51,59 @@ require('lazy').setup({
   {
     --"hrsh7th/cmp-cmdline"
   },
-  {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    config = function()
-      require("nvim-tree").setup {
-        disable_netrw = true,
-        hijack_netrw = true,
-        renderer = {
-          group_empty = true,
-          highlight_git = true,
-          special_files = { "bin", "debug" }
-        },
-        filters = {
-          dotfiles = false,
-        },
-        view = {
-          number = true,
-          relativenumber = true,
-          width = 45,
-        },
-
-        diagnostics = {
-          enable = true,
-          show_on_dirs = true,
-        },
-        modified = {
-          enable = true,
-        },
-        git = {
-          enable = true,
-          timeout = 700,
-        },
-        actions = {
-          open_file = {
-            resize_window = false,
-          }
-        }
-      }
-    end,
-  },
+  { 'echasnovski/mini.files',        version = false },
+  -- {
+  --   "nvim-tree/nvim-tree.lua",
+  --   version = "*",
+  --   lazy = true,
+  --   dependencies = {
+  --     "nvim-tree/nvim-web-devicons",
+  --   },
+  --   config = function()
+  --     require("nvim-tree").setup {
+  --       disable_netrw = true,
+  --       hijack_netrw = true,
+  --       renderer = {
+  --         group_empty = true,
+  --         highlight_git = true,
+  --         special_files = { "bin", "debug" }
+  --       },
+  --       filters = {
+  --         dotfiles = false,
+  --       },
+  --       view = {
+  --         number = true,
+  --         relativenumber = true,
+  --         width = 45,
+  --       },
+  --
+  --       diagnostics = {
+  --         enable = true,
+  --         show_on_dirs = true,
+  --       },
+  --       modified = {
+  --         enable = true,
+  --       },
+  --       git = {
+  --         enable = true,
+  --         timeout = 700,
+  --       },
+  --       actions = {
+  --         open_file = {
+  --           resize_window = false,
+  --         }
+  --       }
+  --     }
+  --   end,
+  -- },
 
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
       'hrsh7th/cmp-nvim-lsp',
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
+      -- 'L3MON4D3/LuaSnip',
+      -- 'saadparwaiz1/cmp_luasnip',
       'hrsh7th/cmp-nvim-lsp-signature-help'
     },
   },
@@ -108,6 +111,7 @@ require('lazy').setup({
   -- Useful plugin to show you pending keybinds.
   {
     'folke/which-key.nvim',
+    event = "VeryLazy",
     opts = {
       window = {
         border = "double", -- none, single, double, shadow
@@ -116,6 +120,7 @@ require('lazy').setup({
   },
   { -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
+    event = "VeryLazy",
     opts = {
       -- See `:help gitsigns.txt`
       signs = {
@@ -134,55 +139,58 @@ require('lazy').setup({
       },
     },
   },
-  { "catppuccin/nvim",               name = "catppuccin" },
+  -- { "catppuccin/nvim",               name = "catppuccin" },
+  -- { "sainnhe/everforest" },
+  -- { "EdenEast/nightfox.nvim" },
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
+    event = "VeryLazy",
     -- See `:help lualine.txt`
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'catppuccin',
+        theme = 'tokyonight',
+        -- theme = 'nightfox',
         component_separators = '|',
         section_separators = '',
       },
     },
   },
-
-  { -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
-    main = 'ibl',
+  -- "gc" to comment visual regions/lines
+  -- REMOVE IN 0.10
+  {
+    'numToStr/Comment.nvim',
+    event = "VeryLazy",
     opts = {}
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
-    -- opts = {
-    --   char = '┊',
-    --   show_trailing_blankline_indent = false,
-    -- },
   },
 
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',         opts = {} },
-
   -- Fuzzy Finder (files, lsp, etc)
-  { 'nvim-telescope/telescope.nvim', version = '*',      dependencies = { 'nvim-lua/plenary.nvim' } },
+  { 'nvim-telescope/telescope.nvim', event = "VeryLazy", version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built.
   -- Only load if `make` is available. Make sure you have the system
   -- requirements installed.
-  {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    -- NOTE: If you are having trouble with this installation,
-    --       refer to the README for telescope-fzf-native for more instructions.
-    build = 'make',
-    cond = function()
-      return vim.fn.executable 'make' == 1
-    end,
-  },
-
+  -- {
+  --   'nvim-telescope/telescope-fzf-native.nvim',
+  --   -- NOTE: If you are having trouble with this installation,
+  --   --       refer to the README for telescope-fzf-native for more instructions.
+  --   build = 'make',
+  --   cond = function()
+  --     return vim.fn.executable 'make' == 1
+  --   end,
+  -- },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
+      {
+        'nvim-treesitter/nvim-treesitter-textobjects',
+      }
     },
     config = function()
       pcall(require('nvim-treesitter.install').update { with_sync = true })
@@ -192,9 +200,16 @@ require('lazy').setup({
   --{ import = 'custom.plugins' },
 }, {})
 
+-- Add filetypes
+vim.filetype.add({
+  extension = {
+    bicepparam = 'bicep'
+  }
+})
 
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
+-- vim.opt.colorcolumn = "80"
 
 
 -- Make line numbers default
@@ -204,9 +219,13 @@ vim.opt.relativenumber = true
 -- Enable mouse mode
 vim.o.mouse = 'a'
 vim.o.tabstop = 4
+vim.o.expandtab = true
 vim.o.shiftwidth = 4
 vim.o.scrolloff = 10
-vim.cmd.colorscheme "catppuccin"
+-- vim.cmd.colorscheme "catppuccin"
+-- vim.cmd.colorscheme "everforest"
+vim.cmd.colorscheme "tokyonight-night"
+-- vim.cmd.colorscheme "carbonfox"
 
 vim.opt.wildmenu = true
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
@@ -214,7 +233,7 @@ vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.o.clipboard = 'unnamedplus'
+vim.opt.clipboard = 'unnamedplus'
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -229,11 +248,23 @@ vim.o.smartcase = true
 -- Keep signcolumn on by default
 vim.wo.signcolumn = 'yes'
 
+-- last buffer
+vim.keymap.set("n", "<leader>l", "<C-^>")
 
--- Nvim tree!
-vim.keymap.set("n", "<leader>e", vim.cmd.NvimTreeToggle, { desc = "[E]xplorer" })
-vim.keymap.set('n', "<leader>tc", vim.cmd.NvimTreeCollapse, { desc = "[T]ree collapse" })
-vim.keymap.set('n', "<leader>tf", vim.cmd.NvimTreeFindFile, { desc = "[T]ree find" })
+vim.keymap.set('n', ';', ':')
+
+
+-- insert mode keymaps
+vim.keymap.set("i", "\\j", "()")
+vim.keymap.set("i", "\\k", "\"\"")
+vim.keymap.set("i", "\\l", "\'\'")
+vim.keymap.set("i", "\\f", "=>")
+
+
+--
+-- minifiles
+require('mini.files').setup()
+vim.keymap.set("n", "<leader>e", function() MiniFiles.open() end, { desc = "[E]xplorer" })
 
 -- Decrease update time
 vim.o.updatetime = 250
@@ -252,9 +283,8 @@ vim.o.termguicolors = true
 -- See `:help vim.keymap.set()`
 -- vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
--- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+-- Why would I wrap?
+vim.opt.wrap = false
 
 
 -- [[ Highlight on yank ]]
@@ -305,6 +335,8 @@ vim.keymap.set('n', '<leader>so', require('telescope.builtin').oldfiles, { desc 
 
 
 
+vim.keymap.set('x', 'a', require('nvim-around').around, { desc = '[A]round' })
+
 
 vim.keymap.set('n', '<leader>ff', vim.lsp.buf.format, { desc = '[F]ormat Code' })
 vim.keymap.set('v', '<leader>ff', vim.lsp.buf.format, { desc = '[F]ormat Code' })
@@ -317,34 +349,19 @@ vim.keymap.set('n', '<leader>w', '<c-w>', { desc = '[W]indow' })
 -- vimrc mapping TODO
 vim.keymap.set('n', '<leader>src', '<cmd>source $MYVIMRC<cr>', { desc = '[S]ource [R][C]' })
 vim.keymap.set('n', '<leader>fe', '<cmd>edit $MYVIMRC<cr>', { desc = '[E]dit Vimrc' })
+-- edit wezterm config
+vim.keymap.set('n', '<leader>fw', '<cmd>edit ~/.wezterm.lua<cr>', { desc = 'Edit [W]ezterm config' })
 
 --vim.keymap.set('i', '<C-s>', '<cmd>w<CR>')
-
---local cmp = require("cmp")
--- `:` cmdline setup.
--- cmp.setup.cmdline(':', {
---   mapping = cmp.mapping.preset.cmdline(),
---   sources = cmp.config.sources({
---     { name = 'path' }
---   }, {
---     {
---       name = 'cmdline',
---       option = {
---         ignore_cmds = { 'Man', '!' }
---       }
---     }
---   })
--- })
-
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vim' },
+  -- ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = false,
+  auto_install = true,
 
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
@@ -465,11 +482,25 @@ local servers = {
   -- pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},
+  eslint = {
+    enable = true,
+    lintTask = {
+      enable = true,
+    },
+    diagnostics = {
+      enable = true,
+      run_on = "type",
+    }
+  },
 
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
+      diagnostics = { globals = { 'vim' } },
+      completion = {
+        callSnippet = "Replace"
+      },
     },
   },
 }
@@ -513,110 +544,129 @@ mason_lspconfig.setup_handlers {
 }
 
 -- debug setup
-local dap, dapui = require("dap"), require("dapui")
-
-vim.g.dotnet_build_project = function()
-  local default_path = vim.fn.getcwd() .. '/'
-  if vim.g['dotnet_last_proj_path'] ~= nil then
-    default_path = vim.g['dotnet_last_proj_path']
-  end
-  local path = vim.fn.input('Path to your *proj file', default_path, 'file')
-  vim.g['dotnet_last_proj_path'] = path
-  local cmd = 'dotnet build -c Debug ' .. path .. ' > /dev/null'
-  print('')
-  print('Cmd to execute: ' .. cmd)
-  local f = os.execute(cmd)
-  if f == 0 then
-    print('\nBuild: ✔️ ')
-  else
-    print('\nBuild: ❌ (code: ' .. f .. ')')
-  end
-end
-
-vim.g.dotnet_get_dll_path = function()
-  local request = function()
-    return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
-  end
-
-  if vim.g['dotnet_last_dll_path'] == nil then
-    vim.g['dotnet_last_dll_path'] = request()
-  else
-    if vim.fn.confirm('Do you want to change the path to dll?\n' .. vim.g['dotnet_last_dll_path'], '&yes\n&no', 2) == 1 then
-      vim.g['dotnet_last_dll_path'] = request()
-    end
-  end
-
-  return vim.g['dotnet_last_dll_path']
-end
-
-
-
-dap.adapters.coreclr = {
-  type = 'executable',
-  -- command = 'C:/Users/ludwi/AppData/Local/nvim-data/mason/bin/netcoredbg',
-  command = 'C:/Users/ludwi/Documents/netcoredbg/netcoredbg/netcoredbg.exe',
-  args = { '--interpreter=vscode' }
-}
-dap.configurations.cs = {
-  {
-    type = "coreclr",
-    name = "launch - netcoredbg",
-    request = "launch",
-    program = function()
-      -- return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
-      if vim.fn.confirm('Should I recompile first?', '&yes\n&no', 2) == 1 then
-        vim.g.dotnet_build_project()
-      end
-      return vim.g.dotnet_get_dll_path()
-    end,
-  },
-}
-
-dapui.setup()
-
-vim.keymap.set('n', '<leader>do', function()
-  dapui.open()
-end, { desc = "[O]pen UI" })
-
-vim.keymap.set('n', '<leader>dp', function()
-  dapui.close()
-end, { desc = "[P]close UI" })
-
-dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
-end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
-end
-
-
-
--- vim.keymap.set('n', '<leader>dc', "<cmd>:lua require('dap').continue()<CR>")
--- vim.keymap.set('n', '<leader>db', "<cmd>:lua require('dap').toggle_breakpoint()<CR>")
-
-vim.keymap.set('n', '<leader>dc', function() dap.continue() end, { desc = "[C]ontinue/Start Debugging" })
-vim.keymap.set('n', '<leader>dq', function() dap.step_over() end, { desc = "[Q] Step over" })
-vim.keymap.set('n', '<leader>dw', function() dap.step_into() end, { desc = "[W] Step into" })
-vim.keymap.set('n', '<leader>de', function() dap.step_out() end, { desc = "[E] Step out" })
-vim.keymap.set('n', '<leader>db', function() dap.toggle_breakpoint() end, { desc = "Set [B]reakpoint" })
-
+-- local dap, dapui = require("dap"), require("dapui")
+--
+-- vim.g.dotnet_build_project = function()
+--   local default_path = vim.fn.getcwd() .. '/'
+--   if vim.g['dotnet_last_proj_path'] ~= nil then
+--     default_path = vim.g['dotnet_last_proj_path']
+--   end
+--   local path = vim.fn.input('Path to your *proj file', default_path, 'file')
+--   vim.g['dotnet_last_proj_path'] = path
+--   local cmd = 'dotnet build -c Debug ' .. path .. ' > /dev/null'
+--   print('')
+--   print('Cmd to execute: ' .. cmd)
+--   local f = os.execute(cmd)
+--   if f == 0 then
+--     print('\nBuild: ✔️ ')
+--   else
+--     print('\nBuild: ❌ (code: ' .. f .. ')')
+--   end
+-- end
+--
+-- vim.g.dotnet_get_dll_path = function()
+--   local request = function()
+--     return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+--   end
+--
+--   if vim.g['dotnet_last_dll_path'] == nil then
+--     vim.g['dotnet_last_dll_path'] = request()
+--   else
+--     if vim.fn.confirm('Do you want to change the path to dll?\n' .. vim.g['dotnet_last_dll_path'], '&yes\n&no', 2) == 1 then
+--       vim.g['dotnet_last_dll_path'] = request()
+--     end
+--   end
+--
+--   return vim.g['dotnet_last_dll_path']
+-- end
+--
+--
+--
+-- dap.adapters.coreclr = {
+--   type = 'executable',
+--   -- command = 'C:/Users/ludwi/AppData/Local/nvim-data/mason/bin/netcoredbg',
+--   command = 'C:/Users/8746/AppData/Local/nvim-data/mason/packages/netcoredbg/netcoredbg/netcoredbg.exe',
+--   args = { '--interpreter=vscode' }
+-- }
+-- dap.configurations.cs = {
+--   {
+--     type = "coreclr",
+--     name = "launch - netcoredbg",
+--     request = "launch",
+--     program = function()
+--       -- return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+--       if vim.fn.confirm('Should I recompile first?', '&yes\n&no', 2) == 1 then
+--         vim.g.dotnet_build_project()
+--       end
+--       return vim.g.dotnet_get_dll_path()
+--     end,
+--     env = {
+--       ASPNETCORE_ENVIRONMENT = function()
+--         -- todo: request input from ui
+--         return "Development"
+--       end,
+--       ASPNETCORE_URLS = function()
+--         -- todo: request input from ui
+--         return "http://localhost:5050"
+--       end,
+--     },
+--     cwd = function()
+--       return vim.fn.input("Workspace folder: ", vim.fn.getcwd() .. "/", "file")
+--     end,
+--   },
+-- }
+--
+-- dapui.setup()
+--
+-- vim.keymap.set('n', '<leader>do', function()
+--   dapui.open()
+-- end, { desc = "[O]pen UI" })
+--
+-- vim.keymap.set('n', '<leader>dp', function()
+--   dapui.close()
+-- end, { desc = "[P]close UI" })
+--
+-- dap.listeners.after.event_initialized["dapui_config"] = function()
+--   dapui.open()
+-- end
+-- dap.listeners.before.event_terminated["dapui_config"] = function()
+--   dapui.close()
+-- end
+-- dap.listeners.before.event_exited["dapui_config"] = function()
+--   dapui.close()
+-- end
+--
+--
+--
+-- -- vim.keymap.set('n', '<leader>dc', "<cmd>:lua require('dap').continue()<CR>")
+-- -- vim.keymap.set('n', '<leader>db', "<cmd>:lua require('dap').toggle_breakpoint()<CR>")
+--
+-- vim.keymap.set('n', '<leader>dc', function() dap.continue() end, { desc = "[C]ontinue/Start Debugging" })
+-- vim.keymap.set('n', '<leader>dq', function() dap.step_over() end, { desc = "[Q] Step over" })
+-- vim.keymap.set('n', '<leader>dw', function() dap.step_into() end, { desc = "[W] Step into" })
+-- vim.keymap.set('n', '<leader>de', function() dap.step_out() end, { desc = "[E] Step out" })
+-- vim.keymap.set('n', '<leader>db', function() dap.toggle_breakpoint() end, { desc = "Set [B]reakpoint" })
+--
 
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
-local luasnip = require 'luasnip'
+-- local luasnip = require 'luasnip'
 
-luasnip.config.setup {}
+-- luasnip.config.setup {}
 
 cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
+  window = {
+    completion = {
+      border = 'rounded',
+      scrollbar = '║',
+    },
   },
+  -- snippet = {
+  --   expand = function(args)
+  --     luasnip.lsp_expand(args.body)
+  --   end,
+  -- },
   mapping = cmp.mapping.preset.insert {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -630,28 +680,28 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
+    -- ['<Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_next_item()
+    --   elseif luasnip.expand_or_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
+    -- ['<S-Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_prev_item()
+    --   elseif luasnip.jumpable(-1) then
+    --     luasnip.jump(-1)
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
   },
   sources = {
     { name = 'nvim_lsp' },
-    { name = 'luasnip' },
+    -- { name = 'luasnip' },
     { name = 'nvim_lsp_signature_help' },
   },
 }
