@@ -1,0 +1,29 @@
+super + Return
+	alacritty
+
+super + q
+	bspc node -c
+
+super + Escape
+	bspc quit
+
+super + @space
+	dmenu_run
+
+super + {1-5}
+	bspc desktop -f {1, 2, 3, 4, 5}
+
+super + shift + {1-5}
+	bspc node -d {1, 2, 3, 4, 5}
+
+super + h
+	bspc node -f west
+
+super + l
+	bspc node -f east
+
+super + k
+	bspc node -f north
+
+super + j
+	bspc node -f south
