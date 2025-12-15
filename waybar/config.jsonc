@@ -7,15 +7,15 @@
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
+        "hyprland/workspaces"
     ],
     "modules-center": [
-        //"sway/window"
-        "hyprland/workspaces",
     ],
     "modules-right": [
         // "mpd",
         // "idle_inhibitor",
         // "pulseaudio",
+        "wireplumber",
         "network",
         // "power-profiles-daemon",
         // "cpu",
@@ -30,6 +30,29 @@
         // "custom/power"
         "clock",
     ],
+    "hyprland/workspaces": {
+      "on-click": "activate",
+      "format": "{icon}",
+      "format-icons": {
+        "default": "",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "7": "7",
+        "8": "8",
+        "9": "9",
+        "10": "0",
+        "active": "󱓻"
+      },
+      "persistent-workspaces": {
+        "1": [],
+        "2": [],
+        "3": [],
+      }
+    },
     // Modules configuration
     // "sway/workspaces": {
     //     "disable-scroll": true,
@@ -129,20 +152,19 @@
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
+        "format": "{icon}",
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
     "battery": {
         "states": {
-            // "good": 95,
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
+        "format": "{icon}",
+        "format-full": "{icon}",
+        "format-charging": "",
+        "format-plugged": "",
+        "format-alt": "{capacity}% {time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]
@@ -163,7 +185,9 @@
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+        "format-wifi": "{icon}",
         "format-ethernet": "{ipaddr}/{cidr} ",
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
@@ -188,6 +212,16 @@
             "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
+    },
+
+    "wireplumber": {
+        "format": "{icon}",
+        "format-alt": "{volume}% {icon}",
+        "format-muted": "",
+        "tooltip-format": "Playing at {volume}%",
+        "format-icons": ["", "", ""],
+  },
+        "scroll-step": 1
     },
     "custom/media": {
         "format": "{icon} {text}",

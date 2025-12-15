@@ -6,7 +6,7 @@
 
 window#waybar {
     background-color: rgba(43, 48, 59, 0.5);
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
+    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
     color: #ffffff;
     transition-property: background-color;
     transition-duration: .5s;
@@ -49,9 +49,10 @@ button:hover {
 }
 
 /* you can set a style on hover for any module like this */
-#pulseaudio:hover {
-    background-color: #a37800;
-}
+/* #pulseaudio:hover { */
+/*     background-color: #a37800; */
+/* } */
+
 
 #workspaces button {
     padding: 0 5px;
@@ -104,12 +105,12 @@ button:hover {
 
 #window,
 #workspaces {
-    margin: 0 4px;
+    margin: 4px 4px;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
 .modules-left > widget:first-child > #workspaces {
-    margin-left: 0;
+    margin-left: 30px;
 }
 
 /* If workspaces is the rightmost module, omit right margin */
@@ -208,14 +209,14 @@ label:focus {
     color: #2a5c45;
 }
 
-#wireplumber {
-    background-color: #fff0f5;
-    color: #000000;
-}
-
-#wireplumber.muted {
-    background-color: #f53c3c;
-}
+/* #wireplumber { */
+/*     background-color: #fff0f5; */
+/*     color: #000000; */
+/* } */
+/**/
+/* #wireplumber.muted { */
+/*     background-color: #f53c3c; */
+/* } */
 
 #custom-media {
     background-color: #66cc99;
