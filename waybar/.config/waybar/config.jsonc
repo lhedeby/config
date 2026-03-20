@@ -153,7 +153,9 @@
     "backlight": {
         // "device": "acpi_video1",
         "format": "{icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+        "tooltip": true,
+        "tooltip-format": "{percent}%"
     },
     "battery": {
         "states": {
@@ -162,7 +164,7 @@
         },
         "format": "{icon}",
         "format-full": "{icon}",
-        "format-charging": "",
+        "format-charging": "",
         "format-plugged": "",
         "format-alt": "{capacity}% {time} {icon}",
         // "format-good": "", // An empty format will hide the module
