@@ -1,0 +1,8 @@
+decoration {
+    blur {
+        enabled = true
+    }
+}
+normal_window=false
+width=800
+height=500
