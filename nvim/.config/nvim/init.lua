@@ -390,29 +390,33 @@ require('lazy').setup({
     --         vim.cmd.colorscheme('everforest')
     --     end
     -- },
+    -- {
+    --     "EdenEast/nightfox.nvim",
+    --     lazy = false,
+    --     priority = 1000,
+    --     opts = {},
+    --     config = function()
+    --         vim.cmd.colorscheme('carbonfox')
+    --     end
+    -- },
     {
-        "EdenEast/nightfox.nvim",
-        lazy = false,
-        priority = 1000,
-        opts = {},
+      "folke/tokyonight.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
+
         config = function()
-            vim.cmd.colorscheme('carbonfox')
+            vim.cmd.colorscheme('tokyonight-night')
         end
     },
-    -- {
-    --   "folke/tokyonight.nvim",
-    --   lazy = false,
-    --   priority = 1000,
-    --   opts = {},
-    -- },
     {
         'nvim-lualine/lualine.nvim',
         event = "VeryLazy",
         opts = {
             options = {
                 icons_enabled = false,
-                -- theme = 'tokyonight',
-                theme = 'carbonfox',
+                theme = 'tokyonight',
+                -- theme = 'carbonfox',
                 -- theme = 'everforest',
                 -- theme = 'catppuccin-mocha',
                 -- theme = 'gruvbox-material',
