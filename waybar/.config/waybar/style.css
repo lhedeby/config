@@ -1,7 +1,7 @@
 * {
   border: none;
   border-radius: 0;
-  font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", sans-serif;
+  font-family: "DejaVu Sans Mono","JetBrainsMono Nerd Font", "Symbols Nerd Font", sans-serif;
   font-size: 13px;
   min-height: 0;
 }
@@ -50,6 +50,7 @@ window#waybar {
 #custom-notification,
 #backlight,
 #idle_inhibitor,
+#custom-kbd,
 #language {
   padding: 0 10px;
   margin: 0 2px;

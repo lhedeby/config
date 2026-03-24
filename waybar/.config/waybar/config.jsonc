@@ -11,7 +11,7 @@
   "modules-left": [
     "custom/launcher",
     "clock",
-    "hyprland/language",
+    "custom/kbd",
   ],
   "modules-center": [
     "hyprland/workspaces"
@@ -64,9 +64,11 @@
     "on-click": "pavucontrol"
 
   },
-  "hyprland/language": {
-    "format": "{short}",
-    "on-click": "hyprctl switchxkblayout current next"
+  "custom/kbd": {
+    "exec": "~/.config/waybar/scripts/language.sh show",
+    "interval": "once",
+    "return-type": "json",
+    "on-click": "~/.config/waybar/scripts/language.sh toggle"
   },
   "battery": {
     "states": {

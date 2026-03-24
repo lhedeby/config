@@ -29,7 +29,9 @@ vim.opt.clipboard = 'unnamedplus'
 vim.opt.wrap = false
 vim.opt.colorcolumn = '80'
 
--- normal mode keymaps
+-------------------------
+-- normal mode keymaps --
+-------------------------
 vim.keymap.set("n", "<leader>l", "<C-^>")
 vim.keymap.set('n', ';', ':')
 vim.keymap.set('n', '<leader>ff', vim.lsp.buf.format, { desc = '[F]ormat Code' })
@@ -38,23 +40,23 @@ vim.keymap.set('n', '<leader>w', '<c-w>', { desc = '[W]indow' })
 vim.keymap.set('n', '<leader>src', '<cmd>source $MYVIMRC<cr>', { desc = '[S]ource [R][C]' })
 vim.keymap.set('n', '<leader>fe', '<cmd>edit $MYVIMRC<cr>', { desc = '[E]dit Vimrc' })
 vim.keymap.set('n', '<leader>fw', '<cmd>edit ~/.wezterm.lua<cr>', { desc = 'Edit [W]ezterm config' })
--- insert mode keymaps
-vim.keymap.set("i", "\\j", "()")
-vim.keymap.set("i", "\\k", "\"\"")
-vim.keymap.set("i", "\\l", "\'\'")
-vim.keymap.set("i", "\\f", "=>")
--- visual mode keymaps
-vim.keymap.set('v', '<leader>ff', vim.lsp.buf.format, { desc = '[F]ormat Code' })
-
--- Diagnostic keymaps
+vim.keymap.set('n', '<leader>de', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
+vim.keymap.set('n', '<leader>dd', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end,
     { desc = "Go to previous diagnostic message" })
 vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end,
     { desc = "Go to next diagnostic message" })
---vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
-vim.keymap.set('n', '<leader>dd', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
-
-
+-------------------------
+-- insert mode keymaps --
+-------------------------
+vim.keymap.set("i", "\\j", "()")
+vim.keymap.set("i", "\\k", "\"\"")
+vim.keymap.set("i", "\\l", "\'\'")
+vim.keymap.set("i", "\\f", "=>")
+-------------------------
+-- visual mode keymaps --
+-------------------------
+vim.keymap.set('v', '<leader>ff', vim.lsp.buf.format, { desc = '[F]ormat Code' })
 
 -- bicepparam is a bicep file
 vim.filetype.add({
@@ -63,8 +65,6 @@ vim.filetype.add({
     }
 })
 
--- [[ Highlight on yank ]]
--- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
     callback = function()
@@ -74,9 +74,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     pattern = '*',
 })
 
--- Install package manager
---    https://github.com/folke/lazy.nvim
---    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system {
@@ -84,7 +81,7 @@ if not vim.loop.fs_stat(lazypath) then
         'clone',
         '--filter=blob:none',
         'https://github.com/folke/lazy.nvim.git',
-        '--branch=stable', -- latest stable release
+        '--branch=stable',
         lazypath,
     }
 end
@@ -110,17 +107,11 @@ require('lazy').setup({
             },
         },
     },
-    -- 'tpope/vim-sleuth',
-    -- 'mfussenegger/nvim-dap',
-    -- 'rcarriga/nvim-dap-ui',
-    -- 'Issafalcon/lsp-overloads.nvim',
-    -- { 'github/copilot.vim',  event = "VeryLazy" },
-    { -- LSP Configuration & Plugins
+    {
         'neovim/nvim-lspconfig',
         dependencies = {
             { 'mason-org/mason.nvim', opts = {} },
             'mason-org/mason-lspconfig.nvim',
-            -- 'Hoffs/omnisharp-extended-lsp.nvim',
             { 'j-hui/fidget.nvim',    opts = {} },
         },
 
@@ -137,27 +128,17 @@ require('lazy').setup({
                     map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
                     map('K', function() vim.lsp.buf.hover({ border = "rounded" }) end, "Hover")
 
-
                     local fzf = require('fzf-lua')
                     map('gr', fzf.lsp_references, '[G]oto [R]eferences')
                     map('gi', fzf.lsp_implementations, '[G]oto [I]mplementation')
                     map('gd', fzf.lsp_definitions, '[G]oto [D]efinition')
                     map('gO', fzf.lsp_document_symbols, 'Open Document Symbols')
                     map('gt', fzf.lsp_typedefs, '[G]oto [T]ype Definition')
-
-                    -- map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-                    -- map('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-                    -- map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-                    -- map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
-                    -- map('gt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
-
                     map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
                     map('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-                    -- map('i', '<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
                 end,
             })
 
-            -- Diagnostic Config
             -- See :help vim.diagnostic.Opts
             vim.diagnostic.config {
                 severity_sort = true,
@@ -186,30 +167,9 @@ require('lazy').setup({
                 },
             }
 
-            --  Add any additional override configuration in the following tables. Available keys are:
-            --  - cmd (table): Override the default command used to start the server
-            --  - filetypes (table): Override the default list of associated filetypes for the server
-            --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-            --  - settings (table): Override the default settings passed when initializing the server.
-            --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
             local servers = {
-                -- clangd = {},
-                -- gopls = {},
-                -- pyright = {},
-                -- rust_analyzer = {},
-                -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-                --
-                -- Some languages (like typescript) have entire language plugins that can be useful:
-                --    https://github.com/pmizio/typescript-tools.nvim
-                --
-                -- But for many setups, the LSP (`ts_ls`) will work just fine
-                -- ts_ls = {},
-                --
-
+                -- See `:help lspconfig-all` for a list of all the pre-configured LSPs
                 lua_ls = {
-                    -- cmd = { ... },
-                    -- filetypes = { ... },
-                    -- capabilities = {},
                     settings = {
                         Lua = {
                             completion = {
@@ -228,7 +188,7 @@ require('lazy').setup({
 
             local ensure_installed = vim.tbl_keys(servers or {})
             vim.list_extend(ensure_installed, {
-                'stylua', -- Used to format Lua code
+                'stylua',
             })
 
             require("mason").setup({
@@ -244,9 +204,6 @@ require('lazy').setup({
                 handlers = {
                     function(server_name)
                         local server = servers[server_name] or {}
-                        -- This handles overriding only values explicitly passed
-                        -- by the server configuration above. Useful when disabling
-                        -- certain features of an LSP (for example, turning off formatting for ts_ls)
                         server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
                         require('lspconfig')[server_name].setup(server)
                     end,
@@ -254,16 +211,9 @@ require('lazy').setup({
             }
         end,
     },
-
     {
         "seblyng/roslyn.nvim",
-        opts = {
-            -- your configuration comes here; leave empty for default settings
-        },
-    },
-
-    {
-        --"hrsh7th/cmp-cmdline"
+        opts = {},
     },
     {
         'echasnovski/mini.files',
@@ -273,18 +223,15 @@ require('lazy').setup({
             vim.keymap.set("n", "<leader>e", function() MiniFiles.open() end, { desc = "[E]xplorer" })
         end
     },
-
-    { -- Autocompletion
+    -- { "hrsh7th/cmp-cmdline" },
+    {
         'hrsh7th/nvim-cmp',
         dependencies = {
             'hrsh7th/cmp-nvim-lsp',
-            'L3MON4D3/LuaSnip',
-            'saadparwaiz1/cmp_luasnip',
             'hrsh7th/cmp-nvim-lsp-signature-help'
         },
         config = function()
             local cmp = require 'cmp'
-
             cmp.setup {
                 window = {
                     completion = {
@@ -295,7 +242,6 @@ require('lazy').setup({
                 mapping = cmp.mapping.preset.insert {
                     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
                     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-                    -- open suggestions without writing
                     ['<C-s>'] = cmp.mapping.complete(),
                     ["<C-e>"] = cmp.mapping({
                         i = cmp.mapping.abort(),
@@ -313,8 +259,6 @@ require('lazy').setup({
             }
         end
     },
-
-    -- Useful plugin to show you pending keybinds.
     {
         'folke/which-key.nvim',
         event = "VeryLazy",
@@ -324,11 +268,10 @@ require('lazy').setup({
             }
         }
     },
-    { -- Adds git releated signs to the gutter, as well as utilities for managing changes
+    {
         'lewis6991/gitsigns.nvim',
         event = "VeryLazy",
         opts = {
-            -- See `:help gitsigns.txt`
             signs = {
                 add = { text = '+' },
                 change = { text = '~' },
@@ -336,7 +279,7 @@ require('lazy').setup({
                 topdelete = { text = '‾' },
                 changedelete = { text = '~' },
             },
-            current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
+            current_line_blame = true,
             current_line_blame_opts = {
                 virt_text = true,
                 virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
@@ -345,11 +288,6 @@ require('lazy').setup({
             },
         },
     },
-    -- { "catppuccin/nvim",               name = "catppuccin" },
-    -- { "sainnhe/everforest" },
-    -- { "EdenEast/nightfox.nvim" },
-    --
-    --
     -- {
     --     "catppuccin/nvim",
     --     name = "catppuccin",
@@ -400,10 +338,10 @@ require('lazy').setup({
     --     end
     -- },
     {
-      "folke/tokyonight.nvim",
-      lazy = false,
-      priority = 1000,
-      opts = {},
+        "folke/tokyonight.nvim",
+        lazy = false,
+        priority = 1000,
+        opts = {},
 
         config = function()
             vim.cmd.colorscheme('tokyonight-night')
@@ -427,22 +365,15 @@ require('lazy').setup({
     },
     {
         "ibhagwan/fzf-lua",
-        -- optional for icon support
         dependencies = { "nvim-tree/nvim-web-devicons" },
         opts = {},
         config = function()
             local fzf = require('fzf-lua')
-
-            -- Basic files/buffers searches
             vim.keymap.set('n', '<leader>?', fzf.oldfiles, { desc = '[?] Find recently opened files' })
             vim.keymap.set('n', '<leader><space>', fzf.buffers, { desc = '[ ] Find existing buffers' })
-
-            -- Current buffer fuzzy find
             vim.keymap.set('n', '<leader>/', function()
                 fzf.blines({ previewer = false })
             end, { desc = '[/] Fuzzily search in current buffer' })
-
-            -- File searching
             vim.keymap.set('n', '<leader>sf', fzf.files, { desc = '[S]earch [F]iles' })
             vim.keymap.set('n', '<leader>sh', fzf.help_tags, { desc = '[S]earch [H]elp' })
             vim.keymap.set('n', '<leader>sw', fzf.grep_cword, { desc = '[S]earch current [W]ord' })
@@ -451,44 +382,11 @@ require('lazy').setup({
             vim.keymap.set('n', '<leader>so', fzf.oldfiles, { desc = '[O]ld files' })
         end
     },
-    {
-        "shortcuts/no-neck-pain.nvim"
-    },
-    -- {
-    --     'nvim-telescope/telescope.nvim',
-    --     event = "VeryLazy",
-    --     version = '*',
-    --     dependencies = { 'nvim-lua/plenary.nvim' },
-    --     config = function()
-    --         local telescope = require('telescope')
-    --         local builtin = require('telescope.builtin')
-    --         pcall(telescope.load_extension, 'fzf')
-    --
-    --         vim.keymap.set('n', '<leader>?', builtin.oldfiles,
-    --             { desc = '[?] Find recently opened files' })
-    --         vim.keymap.set('n', '<leader><space>', builtin.buffers,
-    --             { desc = '[ ] Find existing buffers' })
-    --         vim.keymap.set('n', '<leader>/', function()
-    --             builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    --                 winblend = 10,
-    --                 previewer = false,
-    --             })
-    --         end, { desc = '[/] Fuzzily search in current buffer' })
-    --         vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-    --         vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-    --         vim.keymap.set('n', '<leader>sw', builtin.grep_string,
-    --             { desc = '[S]earch current [W]ord' })
-    --         vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-    --         vim.keymap.set('n', '<leader>sd', builtin.diagnostics,
-    --             { desc = '[S]earch [D]iagnostics' })
-    --
-    --         vim.keymap.set('n', '<leader>so', builtin.oldfiles, { desc = '[O]ld files' })
-    --     end
-    -- },
+    { "shortcuts/no-neck-pain.nvim" },
     {
         'nvim-treesitter/nvim-treesitter',
         build = ':TSUpdate',
-        main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+        main = 'nvim-treesitter.configs',
         opts = {
             ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
             auto_install = true,
